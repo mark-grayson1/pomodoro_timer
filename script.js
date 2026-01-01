@@ -2,21 +2,27 @@ const timerDisplay = document.getElementById("timer");
 const startBtn = document.getElementById("startBtn");
 const pauseBtn = document.getElementById("pauseBtn");
 const resetBtn = document.getElementById("resetBtn");
+const statusDisplay = document.getElementById("status");
 
-let workDuration = 25 * 60; // in minutes
+const WORK_MINUTES = 25; 
+const BREAK_MINUTES = 5;
+let workDuration = WORK_MINUTES * 60; // in minutes
+let breakDuration = BREAK_MINUTES * 60; // in minutes
+
+let isWorkTime = true;
 let timeLeft = workDuration;
 let timerInterval = null;
 
 function startTimer() {
     if (timerInterval) return; // Timer is already running
-    
+
     timerInterval = setInterval(() => {
       if (timeLeft > 0) {
         timeLeft--;
         updateTimerDisplay();
       } else {
-        clearInterval(timerInterval);
-        timerInterval = null;
+        stopTimer();
+        toggleStatus();
         updateTimerDisplay();
         startTimer();
       }  
@@ -30,17 +36,34 @@ function updateTimerDisplay() {
     timerDisplay.textContent = `${minutes}:${seconds}`;
 }
 
+function toggleStatus() {
+  isWorkTime = !isWorkTime;
+  timeLeft = isWorkTime ? workDuration : breakDuration;
+  statusDisplay.textContent = isWorkTime ? "Focus Time" : "Break Time";
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+}
+
 function pauseTimer() {
-      clearInterval(timerInterval);
-      timerInterval = null;
+      stopTimer();
 }
 
 function resetTimer() {
-  pauseTimer();
-  timeLeft = workDuration;
+  stopTimer();
+
+  if (isWorkTime)
+    timeLeft = workDuration;
+  else
+    timeLeft = breakDuration;
+
   updateTimerDisplay();
 }
 
 startBtn.addEventListener("click", startTimer);
 pauseBtn.addEventListener("click", pauseTimer);
 resetBtn.addEventListener("click", resetTimer);
+
+updateTimerDisplay();
