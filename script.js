@@ -3,6 +3,7 @@ const startBtn = document.getElementById("startBtn");
 const pauseBtn = document.getElementById("pauseBtn");
 const resetBtn = document.getElementById("resetBtn");
 const statusDisplay = document.getElementById("status");
+const cyclesDisplay = document.getElementById("cycles");
 
 const WORK_MINUTES = 25; 
 const BREAK_MINUTES = 5;
@@ -12,6 +13,7 @@ let breakDuration = BREAK_MINUTES * 60; // in minutes
 let isWorkTime = true;
 let timeLeft = workDuration;
 let timerInterval = null;
+let currentCycles = 0;
 
 function startTimer() {
     if (timerInterval) return; // Timer is already running
@@ -22,6 +24,7 @@ function startTimer() {
         updateTimerDisplay();
       } else {
         stopTimer();
+        updateCycles();
         toggleStatus();
         updateTimerDisplay();
         startTimer();
@@ -42,6 +45,14 @@ function toggleStatus() {
   statusDisplay.textContent = isWorkTime ? "Focus Time" : "Break Time";
 }
 
+function updateCycles() {
+  if (!isWorkTime ) {
+    let currentCycles = parseInt(cyclesDisplay.textContent.split(": ")[1]);
+    currentCycles++;
+    cyclesDisplay.textContent = `Cycles completed: ${currentCycles}`;
+  }
+}
+
 function stopTimer() {
     clearInterval(timerInterval);
     timerInterval = null;
@@ -53,7 +64,6 @@ function pauseTimer() {
 
 function resetTimer() {
   stopTimer();
-
   if (isWorkTime)
     timeLeft = workDuration;
   else
