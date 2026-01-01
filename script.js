@@ -8,7 +8,8 @@ let timeLeft = workDuration;
 let timerInterval = null;
 
 function startTimer() {
-
+    if (timerInterval) return; // Timer is already running
+    
     timerInterval = setInterval(() => {
       if (timeLeft > 0) {
         timeLeft--;
