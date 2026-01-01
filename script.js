@@ -1,11 +1,15 @@
-const timerDisplay = document.getElementById('timer');
+const timerDisplay = document.getElementById("timer");
+const startBtn = document.getElementById("startBtn");
+const pauseBtn = document.getElementById("pauseBtn");
+const resetBtn = document.getElementById("resetBtn");
 
 let workDuration = 25 * 60; // in minutes
 let timeLeft = workDuration;
 let timerInterval = null;
 
 function startTimer() {
-    const timerInterval = setInterval(() => {
+
+    timerInterval = setInterval(() => {
       if (timeLeft > 0) {
         timeLeft--;
         updateTimerDisplay();
@@ -25,4 +29,17 @@ function updateTimerDisplay() {
     timerDisplay.textContent = `${minutes}:${seconds}`;
 }
 
-startTimer();
+function pauseTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+}
+
+function resetTimer() {
+  pauseTimer();
+  timeLeft = workDuration;
+  updateTimerDisplay();
+}
+
+startBtn.addEventListener("click", startTimer);
+pauseBtn.addEventListener("click", pauseTimer);
+resetBtn.addEventListener("click", resetTimer);
