@@ -5,8 +5,8 @@ const resetBtn = document.getElementById("resetBtn");
 const statusDisplay = document.getElementById("status");
 const cyclesDisplay = document.getElementById("cycles");
 
-const WORK_MINUTES = 25; 
-const BREAK_MINUTES = 5;
+const WORK_MINUTES = 0.3; 
+const BREAK_MINUTES = 0.1;
 let workDuration = WORK_MINUTES * 60; // in minutes
 let breakDuration = BREAK_MINUTES * 60; // in minutes
 
