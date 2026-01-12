@@ -5,8 +5,8 @@ const resetBtn = document.getElementById("resetBtn");
 const statusDisplay = document.getElementById("status");
 const cyclesDisplay = document.getElementById("cycles");
 
-const WORK_MINUTES = 0.3; 
-const BREAK_MINUTES = 0.1;
+const WORK_MINUTES = 25;
+const BREAK_MINUTES = 5;
 let workDuration = WORK_MINUTES * 60; // in minutes
 let breakDuration = BREAK_MINUTES * 60; // in minutes
 
@@ -16,60 +16,58 @@ let timerInterval = null;
 let currentCycles = 0;
 
 function startTimer() {
-    if (timerInterval) return; // Timer is already running
+	if (timerInterval) return; // Timer is already running
 
-    timerInterval = setInterval(() => {
-      if (timeLeft > 0) {
-        timeLeft--;
-        updateTimerDisplay();
-      } else {
-        stopTimer();
-        updateCycles();
-        toggleStatus();
-        updateTimerDisplay();
-        startTimer();
-      }  
-    }, 1000);
+	timerInterval = setInterval(() => {
+		if (timeLeft > 0) {
+			timeLeft--;
+			updateTimerDisplay();
+		} else {
+			stopTimer();
+			updateCycles();
+			toggleStatus();
+			updateTimerDisplay();
+			startTimer();
+		}
+	}, 1000);
 }
 
 function updateTimerDisplay() {
-    const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
-    const seconds = String(timeLeft % 60).padStart(2, "0");
-    console.log(`${minutes}:${seconds < 10 ? "0" : ""}${seconds}`);
-    timerDisplay.textContent = `${minutes}:${seconds}`;
+	const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
+	const seconds = String(timeLeft % 60).padStart(2, "0");
+	console.log(`${minutes}:${seconds < 10 ? "0" : ""}${seconds}`);
+	timerDisplay.textContent = `${minutes}:${seconds}`;
 }
 
 function toggleStatus() {
-  isWorkTime = !isWorkTime;
-  timeLeft = isWorkTime ? workDuration : breakDuration;
-  statusDisplay.textContent = isWorkTime ? "Focus Time" : "Break Time";
+	isWorkTime = !isWorkTime;
+	timeLeft = isWorkTime ? workDuration : breakDuration;
+	statusDisplay.textContent = isWorkTime ? "Focus Time" : "Break Time";
 }
 
 function updateCycles() {
-  if (!isWorkTime ) {
-    let currentCycles = parseInt(cyclesDisplay.textContent.split(": ")[1]);
-    currentCycles++;
-    cyclesDisplay.textContent = `Cycles completed: ${currentCycles}`;
-  }
+	if (!isWorkTime) {
+		let currentCycles = parseInt(cyclesDisplay.textContent.split(": ")[1]);
+		currentCycles++;
+		cyclesDisplay.textContent = `Cycles completed: ${currentCycles}`;
+	}
 }
 
 function stopTimer() {
-    clearInterval(timerInterval);
-    timerInterval = null;
+	clearInterval(timerInterval);
+	timerInterval = null;
 }
 
 function pauseTimer() {
-      stopTimer();
+	stopTimer();
 }
 
 function resetTimer() {
-  stopTimer();
-  if (isWorkTime)
-    timeLeft = workDuration;
-  else
-    timeLeft = breakDuration;
+	stopTimer();
+	if (isWorkTime) timeLeft = workDuration;
+	else timeLeft = breakDuration;
 
-  updateTimerDisplay();
+	updateTimerDisplay();
 }
 
 startBtn.addEventListener("click", startTimer);
